@@ -10,8 +10,8 @@ var upperCaseLetters = [
 ];
 var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-
-var firstQuestion = "";
+// This assigns the default values to variables.
+var firstQuestion = 0;
 var secondQuestion = false;
 var thirdQuestion = false;
 var fourthQuestion = false;
@@ -19,18 +19,31 @@ var fifthQuestion = false;
 
 // These are the questions asked for the criteria of the password.
 function askUser() {
-  firstQuestion = prompt("How long would you like your password to be?");
-  // if (firstQuestion = 8-128)
-  secondQuestion = confirm("Would you like it to contain special characters?");
-  thirdQuestion = confirm("Would you like it to contain lowercase letter?");
-  fourthQuestion = confirm("Would you like it to contain upper case letters?");
-  fifthQuestion = confirm("Would you like it to contain numbers?");
+  firstQuestion = parseInt(prompt("How long would you like your password to be?"));
+  
+  // Loops user through question until a valid number is entered.
+  while (isNaN(firstQuestion) || firstQuestion < 8 || firstQuestion > 128){
+    firstQuestion = parseInt(prompt("Please enter a number between 8-128."));
+  }
+  
+  // Repeats questions if one character type is not selected.
+  do {
+    secondQuestion = confirm("Would you like it to contain special characters?");
+    thirdQuestion = confirm("Would you like it to contain lowercase letter?");
+    fourthQuestion = confirm("Would you like it to contain upper case letters?");
+    fifthQuestion = confirm("Would you like it to contain numbers?");
+
+    var repeat = !secondQuestion && !thirdQuestion && !fourthQuestion && !fifthQuestion;
+    if (repeat){
+      alert("Please confirm at least one character type.");
+    }
+  } while (repeat);
 }
 
 // The new array formed after criteria has been selected.
 var passwordPool = [];
 
-// This validates the input of criteria selected.
+// Validates the input of criteria selected.
 function generatePool() {
   if (secondQuestion === true) { 
     passwordPool = passwordPool.concat(specialCharacters); 
@@ -49,11 +62,12 @@ function generatePool() {
   }
 }
 
+// Returns randomly generated password based off user set criteria.
 function generatePassword() {
   var randomPassword = "";
   for (var i = 0; i < firstQuestion; i++){ 
     var index = Math.floor(Math.random() * passwordPool.length); 
-    randomPassword = randomPassword + passwordPool[index]
+    randomPassword = randomPassword + passwordPool[index];
   }
   return randomPassword;
 }
@@ -63,22 +77,14 @@ var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
+  passwordPool = [];
   askUser();
   generatePool();
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-// To Do List
-// when we click button we create prompt 
-// when prompted, select what to include: special characters, letters, etc. 
-// password between 8-128 characters
-// use at least one character type
-// password generates
-// displays password in page
