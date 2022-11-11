@@ -49,30 +49,22 @@ function generatePool() {
   }
 }
 
-var randomPassword = "";
-
 function generatePassword() {
+  var randomPassword = "";
   for (var i = 0; i < firstQuestion; i++){ 
     var index = Math.floor(Math.random() * passwordPool.length); 
     randomPassword = randomPassword + passwordPool[index]
   }
+  return randomPassword;
 }
-
-
-
-askUser();
-// generatePool();
-// generatePassword();
-
-// console.log(randomPassword);
-
-
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
 // Write password to the #password input
 function writePassword() {
+  askUser();
+  generatePool();
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
